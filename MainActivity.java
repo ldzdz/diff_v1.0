@@ -1,4 +1,4 @@
-package cn.com.pansky.sxzgyl;
+package ;
 
 import android.Manifest;
 import android.app.ActivityManager;
@@ -43,14 +43,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import cn.com.pansky.reactnative.getui.GetuiModule;
-import cn.com.pansky.sxzgyl.utils.AppHelper;
-import cn.com.pansky.sxzgyl.utils.AppUtils;
-import cn.com.pansky.sxzgyl.utils.Tools;
-import cn.com.pansky.sxzgyl.view.CommonProgressDialog;
-//import rnxmpp.RNXMPPPackage;
-//import com.imagepicker.ImagePickerPackage;
-//import com.keyee.datetime.RCTDateTimePickerPackage;
+
 
 public class MainActivity extends ReactActivity {
 
@@ -84,7 +77,7 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "Pansky";
+        return "Pan";
     }
 
 
@@ -129,31 +122,9 @@ public class MainActivity extends ReactActivity {
     }
 
 
-    @Override
-    protected void onResume() {
-        // TODO Auto-generated method stub
-        super.onResume();
+   
 
-        // 自定义摇一摇的灵敏度，默认为950，数值越小灵敏度越高。
-        PgyFeedbackShakeManager.setShakingThreshold(1000);
-
-        // 以对话框的形式弹出，对话框只支持竖屏
-        PgyFeedbackShakeManager.register(MainActivity.this);
-
-        // 以Activity的形式打开，这种情况下必须在AndroidManifest.xml配置FeedbackActivity
-        // 打开沉浸式,默认为false
-        // FeedbackActivity.setBarImmersive(true);
-        //PgyFeedbackShakeManager.register(MainActivity.this, true); 相当于使用Dialog的方式；
-        PgyFeedbackShakeManager.register(MainActivity.this, false);
-
-    }
-
-    @Override
-    protected void onPause() {
-        // TODO Auto-generated method stub
-        super.onPause();
-        PgyFeedbackShakeManager.unregister();
-    }
+   
 
 
     // 下载存储的文件名
@@ -161,94 +132,20 @@ public class MainActivity extends ReactActivity {
 
     // 获取更新版本号
     private void getVersion(final int vision) {
-        //通过线程获取防止 假死
-
-//        try {
-//        new Thread(new Runnable(){
-//            @Override
-//            public void run() {
-//                List<PostParam> params = new ArrayList<PostParam>();
-//                JSONObject json = new JSONObject();
-//
-//                json.put("id", "cn.com.pansky.sxzgyl");
-//                params.add(new PostParam("params", "string", json.toJSONString()));
-//                JSONObject obj = AppHelper.send("appupdate/query/queryVersion.json", params);
-//                //System.out.println("vision"+obj);
-//                if  ( !"0".equals(obj.getString("code")) ) {
-//                    return ;
-//                }
-//                JSONObject js = new JSONObject();
-//                js = obj.getJSONObject("result");
-//                String newversion = js.getString("version");//更新新的版本号
-//                String content = js.getString("content");//更新内容
-//                String url = js.getString("uri");//安装包下载地址
-//
-//                double newversioncode = Double
-//                        .parseDouble(newversion);
-//                int cc = (int) (newversioncode);
-//
-//                System.out.println(newversion + "v" + vision + ",,"
-//                        + cc);
-////                if (cc != vision) {
-////                    if (vision < cc) {
-////                        System.out.println(newversion + "v"
-////                                + vision);
-//                        // 版本号不同
-//                        ShowDialog(vision, newversion, content, url);
-////                    }
-////                }
-//            }
-//        }).start();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ;
-//        }
-//        JSONObject  obj = new JSONObject();
+       
         try {
-            List<PostParam> params = new ArrayList<PostParam>();
-            JSONObject json = new JSONObject();
-            json.put("id", "cn.com.pansky.sxzgyl");
-            params.add(new PostParam("params", "string", json.toJSONString()));
-            JSONObject obj = AppHelper.send("appupdate/query/queryVersionVs.json", params);
-            if (!"0".equals(obj.getString("code"))) {
-                return;
-            }
-//                JSONObject js = new JSONObject();
-            JSONObject js = obj.getJSONObject("result");
-            String newversion = js.getString("version");//更新新的版本号
-            String content = js.getString("content");//更新内容
-            //String url = js.getString("uri");//安装包下载地址
-            String url = "http://192.168.0.106:8080/patch.apk";//安装包下载地址
+           //获取APP相关信息 ，判断是否需要更新，需要更新 就从获取的地址去下载差分包
+           //自己的逻辑
+            
+       
+            String url = "http://123:123/patch.apk";//安装包下载地址
 
             double newversioncode = Double
                     .parseDouble(newversion);
             int cc = (int) (newversioncode);
             if (cc != vision) {
                 if (vision < cc) {
-                    //若果版本号7 浏览器下载
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//
-//                        new android.app.AlertDialog.Builder(this)
-//                                .setTitle("版本更新")
-//                                .setMessage(content)
-//                                .setPositiveButton("去下载", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        Uri uri = Uri.parse(url);
-//                                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//                                        startActivity(intent);
-//                                    }
-//                                })
-//                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        dialog.dismiss();
-//                                    }
-//                                })
-//                                .show();
-//
-//                        return ;
-//                    }
+            
                     //  需要更新
                     ShowDialog(vision, newversion, content, url);
                 }
@@ -268,46 +165,7 @@ public class MainActivity extends ReactActivity {
      */
     private void ShowDialog(int vision, String newversion, String content,
                             final String url) {
-//        final MaterialDialog dialog = new MaterialDialog(this);//自定义的对话框，可以呀alertdialog
-//        dialog.content(content).btnText("取消", "更新").title("版本更新 ")
-//                .titleTextSize(15f).show();
-//        dialog.setCanceledOnTouchOutside(false);
-//        dialog.setOnBtnClickL(new OnBtnClickL() {// left btn click listener
-//            @Override
-//            public void onBtnClick() {
-//                dialog.dismiss();
-//            }
-//        }, new OnBtnClickL() {// right btn click listener
-//
-//            @Override
-//            public void onBtnClick() {
-//                dialog.dismiss();
-//                // pBar = new ProgressDialog(MainActivity.this,
-//                // R.style.dialog);
-//                pBar = new CommonProgressDialog(MainActivity.this);
-//                pBar.setCanceledOnTouchOutside(false);
-//                pBar.setTitle("正在下载");
-//                pBar.setCustomTitle(LayoutInflater.from(
-//                        MainActivity.this).inflate(
-//                        R.layout.title_dialog, null));
-//                pBar.setMessage("正在下载");
-//                pBar.setIndeterminate(true);
-//                pBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-//                pBar.setCancelable(true);
-//                // downFile(URLData.DOWNLOAD_URL);
-//                final DownloadTask downloadTask = new DownloadTask(
-//                        MainActivity.this);
-//                downloadTask.execute(url);
-//                pBar.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//                    @Override
-//                    public void onCancel(DialogInterface dialog) {
-//                        downloadTask.cancel(true);
-//                    }
-//                });
-//            }
-//        });
-
-
+//     
         new android.app.AlertDialog.Builder(this).setTitle("版本更新")
                 .setMessage(content)
 //                .setMessage(content+"\n\n"+"(如果点击更新后提示解析包失败,请点击去浏览器更新)")
@@ -571,7 +429,7 @@ public class MainActivity extends ReactActivity {
         // 判断版本大于等于7.0
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             // "net.csdn.blog.ruancoder.fileprovider"即是在清单文件中配置的authorities
-            data = FileProvider.getUriForFile(this, "cn.com.pansky.sxzgyl.provider", file);
+            data = FileProvider.getUriForFile(this, "包名.provider", file);
             // 给目标应用一个临时授权
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else {
@@ -579,14 +437,9 @@ public class MainActivity extends ReactActivity {
         }
         intent.setDataAndType(data, "application/vnd.android.package-archive");
         this.startActivity(intent);
-        //MMP 这句代码 导致加固后的包更新失败  不需要手动杀死进程
-        //android.os.Process.killProcess(android.os.Process.myPid());
 
     }
 
-//    private String getsdpath(){
-//        return Environment.getExternalStorageDirectory().getPath()+ File.separator;
-//    }
     //生成差分包
     public native int diff(String oldpath,String newpath,String patch);
     //旧apk和差分包合并
