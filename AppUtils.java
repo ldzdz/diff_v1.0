@@ -1,4 +1,4 @@
-package cn.com.pansky.sxzgyl.utils;
+package utils;
 
 import android.content.Context;
 import android.content.Intent;
